@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - ChakulaChap Kenya</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- CSS -->
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #1A73E8;
+            --accent: #25D366;
+            --dark: #202124;
+            --gray-100: #F8F9FA;
+            --gray-200: #E8EAED;
+            --gray-300: #DADCE0;
+            --gray-700: #5F6368;
+            --white: #FFFFFF;
+            --danger: #EA4335;
+            --success: #34A853;
+            --warning: #FBBC05;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            width: 100%;
+            max-width: 1400px;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            min-height: 90vh;
+        }
+        
+        /* Sidebar */
+        .admin-sidebar {
+            width: 280px;
+            background: var(--dark);
+            color: white;
+            padding: 30px 0;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .sidebar-header {
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-logo-icon {
+            font-size: 2rem;
+        }
+        
+        .admin-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        
+        .logo-primary {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+        
+        .logo-secondary {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .user-info h4 {
+            font-size: 0.875rem;
+            margin-bottom: 2px;
+        }
+        
+        .user-info p {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255,107,53,0.2);
+            color: white;
+        }
+        
+        .nav-item i {
+            font-size: 1.25rem;
+            width: 24px;
+        }
+        
+        .nav-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .nav-badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .admin-main {
+            flex: 1;
+            background: var(--gray-100);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .admin-header {
+            background: var(--white);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title h1 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .header-title p {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid var(--gray-300);
+            border-radius: 10px;
+            font-size: 0.875rem;
+            width: 300px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-700);
+        }
+        
+        .notification-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-700);
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+        }
+        
+        .back-to-app {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        .back-to-app:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+        
+        /* Content Area */
+        .admin-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        /* Dashboard */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-icon.campuses { background: linear-gradient(135deg, var(--primary), #FF8B35); }
+        .stat-icon.meals { background: linear-gradient(135deg, var(--secondary), #4285F4); }
+        .stat-icon.students { background: linear-gradient(135deg, var(--accent), #34D399); }
+        .stat-icon.revenue { background: linear-gradient(135deg, var(--warning), #FBBF24); }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .stat-info p {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+        
+        /* Tables */
+        .data-table-container {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .table-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-header h3 {
+            color: var(--dark);
+            font-size: 1.25rem;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            background: var(--gray-100);
+            padding: 15px 25px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .data-table td {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.875rem;
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--gray-100);
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-active {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--success);
+        }
+        
+        .status-pending {
+            background: rgba(251, 188, 5, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-inactive {
+            background: rgba(234, 67, 53, 0.1);
+            color: var(--danger);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        .action-edit {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--secondary);
+        }
+        
+        .action-delete {
+            background: rgba(234, 67, 53, 0.1);
+            color: var(--danger);
+        }
+        
+        .action-view {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--success);
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Forms */
+        .form-container {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-header {
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: var(--gray-700);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.875rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 30px;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--dark);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+            
+            .admin-sidebar {
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .sidebar-nav {
+                display: flex;
+                overflow-x: auto;
+                padding: 10px 0;
+            }
+            
+            .nav-item {
+                flex-direction: column;
+                padding: 10px 15px;
+                min-width: 100px;
+            }
+            
+            .nav-label {
+                font-size: 0.75rem;
+                text-align: center;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="admin-logo">
+                    <div class="admin-logo-icon">🍛</div>
+                    <div class="admin-logo-text">
+                        <div class="logo-primary">ChakulaChap</div>
+                        <div class="logo-secondary">Admin Panel</div>
+                    </div>
+                </div>
+                
+                <div class="admin-user">
+                    <div class="user-avatar">CC</div>
+                    <div class="user-info">
+                        <h4>System Administrator</h4>
+                        <p>admin@chakulachap.co.ke</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                
+                <a href="#meals" class="nav-item" data-section="meals">
+                    <i class="ri-restaurant-line"></i>
+                    <span class="nav-label">Meal Management</span>
+                    <span class="nav-badge" id="mealsCount">50</span>
+                </a>
+                
+                <a href="#campuses" class="nav-item" data-section="campuses">
+                    <i class="ri-map-pin-line"></i>
+                    <span class="nav-label">Campuses</span>
+                    <span class="nav-badge" id="campusesCount">8</span>
+                </a>
+                
+                <a href="#vendors" class="nav-item" data-section="vendors">
+                    <i class="ri-store-line"></i>
+                    <span class="nav-label">Vendors</span>
+                    <span class="nav-badge" id="vendorsCount">24</span>
+                </a>
+                
+                <a href="#students" class="nav-item" data-section="students">
+                    <i class="ri-user-line"></i>
+                    <span class="nav-label">Students</span>
+                    <span class="nav-badge" id="studentsCount">2,000+</span>
+                </a>
+                
+                <a href="#analytics" class="nav-item" data-section="analytics">
+                    <i class="ri-bar-chart-line"></i>
+                    <span class="nav-label">Analytics</span>
+                </a>
+                
+                <a href="#settings" class="nav-item" data-section="settings">
+                    <i class="ri-settings-3-line"></i>
+                    <span class="nav-label">Settings</span>
+                </a>
+                
+                <a href="#whatsapp" class="nav-item" data-section="whatsapp">
+                    <i class="ri-whatsapp-line"></i>
+                    <span class="nav-label">WhatsApp Bot</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="admin-main">
+            <!-- Header -->
+            <div class="admin-header">
+                <div class="header-title">
+                    <h1 id="pageTitle">Admin Dashboard</h1>
+                    <p id="pageSubtitle">Welcome back! Here's what's happening today.</p>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="ri-search-line"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    
+                    <button class="notification-btn">
+                        <i class="ri-notification-3-line"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <a href="index.html" class="back-to-app">
+                        <i class="ri-arrow-left-line"></i>
+                        Back to App
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="admin-content" id="adminContent">
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="content-section active">
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon campuses">
+                                <i class="ri-campus-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalCampuses">8</h3>
+                                <p>Active Campuses</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon meals">
+                                <i class="ri-restaurant-2-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalMeals">50</h3>
+                                <p>Meal Options</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon students">
+                                <i class="ri-user-3-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>2,000+</h3>
+                                <p>Active Students</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon revenue">
+                                <i class="ri-money-dollar-circle-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>KES 85</h3>
+                                <p>Average Meal Price</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-table-container">
+                        <div class="table-header">
+                            <h3>Recent Activity</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-outline">
+                                    <i class="ri-download-line"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>Campus</th>
+                                    <th>User</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Today, 10:30 AM</td>
+                                    <td>New meal added: Githeri Special</td>
+                                    <td>UoN</td>
+                                    <td>Admin</td>
+                                    <td><span class="status-badge status-active">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Today, 09:15 AM</td>
+                                    <td>Price updated: Chapati + Beans</td>
+                                    <td>KU</td>
+                                    <td>Vendor</td>
+                                    <td><span class="status-badge status-active">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Yesterday, 4:45 PM</td>
+                                    <td>New campus request: Maseno University</td>
+                                    <td>-</td>
+                                    <td>Student</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Yesterday, 2:20 PM</td>
+                                    <td>Vendor registration: Mama Nia's Kiosk</td>
+                                    <td>UoN</td>
+                                    <td>Vendor</td>
+                                    <td><span class="status-badge status-active">Completed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="data-table-container">
+                        <div class="table-header">
+                            <h3>Top Performing Meals</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-primary" onclick="showAddMealModal()">
+                                    <i class="ri-add-line"></i> Add New Meal
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Meal Name</th>
+                                    <th>Campus</th>
+                                    <th>Price</th>
+                                    <th>Rating</th>
+                                    <th>Searches</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mealsTableBody">
+                                <!-- Meals loaded via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Meals Management Section -->
+                <div id="mealsSection" class="content-section">
+                    <div class="form-container">
+                        <div class="form-header">
+                            <h2>Add New Meal</h2>
+                            <p>Add a new meal option to the database</p>
+                        </div>
+                        
+                        <form id="mealForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Meal Name *</label>
+                                    <input type="text" class="form-control" placeholder="e.g., Githeri Special" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Campus *</label>
+                                    <select class="form-control" required>
+                                        <option value="">Select Campus</option>
+                                        <option value="uo_nairobi">University of Nairobi</option>
+                                        <option value="ku">Kenyatta University</option>
+                                        <option value="jkuat">JKUAT</option>
+                                        <option value="moi">Moi University</option>
+                                        <option value="egerton">Egerton University</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Price (KES) *</label>
+                                    <input type="number" class="form-control" placeholder="e.g., 70" min="10" max="1000" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Vendor *</label>
+                                    <input type="text" class="form-control" placeholder="e.g., Main Cafeteria" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Location</label>
+                                    <input type="text" class="form-control" placeholder="e.g., Central Campus">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Health Rating (1-5)</label>
+                                    <select class="form-control">
+                                        <option value="1">1 - Poor</option>
+                                        <option value="2">2 - Fair</option>
+                                        <option value="3">3 - Good</option>
+                                        <option value="4" selected>4 - Very Good</option>
+                                        <option value="5">5 - Excellent</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Calories</label>
+                                    <input type="number" class="form-control" placeholder="e.g., 350">
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label class="form-label">Tags</label>
+                                    <input type="text" class="form-control" placeholder="e.g., vegetarian, local, popular (comma separated)">
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label class="form-label">Tip/Description</label>
+                                    <textarea class="form-control form-textarea" placeholder="Add a helpful tip about this meal..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <button type="button" class="btn btn-outline" onclick="resetForm()">
+                                    Reset
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ri-save-line"></i> Save Meal
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Campuses Section -->
+                <div id="campusesSection" class="content-section">
+                    <div class="data-table-container">
+                        <div class="table-header">
+                            <h3>Campuses Management</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-primary">
+                                    <i class="ri-add-line"></i> Add Campus
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Campus</th>
+                                    <th>Location</th>
+                                    <th>Meals</th>
+                                    <th>Vendors</th>
+                                    <th>Students</th>
+                                    <th>Avg Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="font-size: 1.5rem;">🏛️</div>
+                                            <div>
+                                                <div style="font-weight: 600;">University of Nairobi</div>
+                                                <div style="font-size: 0.75rem; color: var(--gray-700);">uo_nairobi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Nairobi CBD</td>
+                                    <td>25</td>
+                                    <td>8</td>
+                                    <td>1,500</td>
+                                    <td>KES 85</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn action-edit">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button class="action-btn action-view">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- More campuses... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Meal Modal -->
+    <div class="modal" id="addMealModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Meal</h3>
+                <button class="modal-close" onclick="hideAddMealModal()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Modal content would be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        class AdminPanel {
+            constructor() {
+                this.currentSection = 'dashboard';
+                this.meals = [];
+                this.init();
+            }
+            
+            init() {
+                this.loadData();
+                this.initEventListeners();
+                this.renderMealsTable();
+                this.updateStats();
+            }
+            
+            loadData() {
+                // Load from localStorage or API
+                const savedMeals = localStorage.getItem('chakulachap_meals');
+                if (savedMeals) {
+                    this.meals = JSON.parse(savedMeals);
+                } else {
+                    // Sample data
+                    this.meals = [
+                        { id: 1, name: 'Githeri Special', campus: 'UoN', price: 70, rating: 4.5, searches: 245, status: 'active' },
+                        { id: 2, name: 'Chapati + Beans', campus: 'KU', price: 60, rating: 4.2, searches: 198, status: 'active' },
+                        { id: 3, name: 'Ugali + Sukuma', campus: 'UoN', price: 80, rating: 4.0, searches: 176, status: 'active' },
+                        { id: 4, name: 'Rice + Beef', campus: 'JKUAT', price: 160, rating: 4.3, searches: 154, status: 'active' },
+                        { id: 5, name: 'Fruit Salad', campus: 'UoN', price: 100, rating: 4.7, searches: 132, status: 'active' }
+                    ];
+                }
+            }
+            
+            initEventListeners() {
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const section = item.dataset.section;
+                        this.showSection(section);
+                    });
+                });
+                
+                // Meal form
+                document.getElementById('mealForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addMeal();
+                });
+                
+                // Search
+                document.querySelector('.search-box input').addEventListener('input', (e) => {
+                    this.search(e.target.value);
+                });
+            }
+            
+            showSection(section) {
+                // Update navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.section === section) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Update content
+                document.querySelectorAll('.content-section').forEach(sec => {
+                    sec.classList.remove('active');
+                });
+                
+                document.getElementById(section + 'Section').classList.add('active');
+                
+                // Update page title
+                const titles = {
+                    dashboard: { title: 'Admin Dashboard', subtitle: 'Welcome back! Here\'s what\'s happening today.' },
+                    meals: { title: 'Meal Management', subtitle: 'Add, edit, or remove meal options' },
+                    campuses: { title: 'Campuses Management', subtitle: 'Manage campus data and locations' },
+                    vendors: { title: 'Vendor Management', subtitle: 'Manage food vendors and partners' },
+                    students: { title: 'Student Analytics', subtitle: 'View student data and usage statistics' },
+                    analytics: { title: 'Analytics Dashboard', subtitle: 'Detailed insights and reports' },
+                    settings: { title: 'System Settings', subtitle: 'Configure application settings' },
+                    whatsapp: { title: 'WhatsApp Bot', subtitle: 'Manage WhatsApp bot settings and logs' }
+                };
+                
+                const pageInfo = titles[section] || titles.dashboard;
+                document.getElementById('pageTitle').textContent = pageInfo.title;
+                document.getElementById('pageSubtitle').textContent = pageInfo.subtitle;
+                
+                this.currentSection = section;
+            }
+            
+            renderMealsTable() {
+                const tbody = document.getElementById('mealsTableBody');
+                tbody.innerHTML = '';
+                
+                this.meals.forEach(meal => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div style="font-weight: 600;">${meal.name}</div>
+                            <div style="font-size: 0.75rem; color: var(--gray-700);">ID: ${meal.id}</div>
+                        </td>
+                        <td>${meal.campus}</td>
+                        <td>KES ${meal.price}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <span style="color: var(--warning);">${'★'.repeat(Math.floor(meal.rating))}${'☆'.repeat(5 - Math.floor(meal.rating))}</span>
+                                <span>${meal.rating.toFixed(1)}</span>
+                            </div>
+                        </td>
+                        <td>${meal.searches}</td>
+                        <td>
+                            <span class="status-badge ${meal.status === 'active' ? 'status-active' : 'status-inactive'}">
+                                ${meal.status === 'active' ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn action-edit" onclick="admin.editMeal(${meal.id})">
+                                    <i class="ri-edit-line"></i>
+                                </button>
+                                <button class="action-btn action-delete" onclick="admin.deleteMeal(${meal.id})">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                                <button class="action-btn action-view">
+                                    <i class="ri-eye-line"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            
+            addMeal() {
+                const form = document.getElementById('mealForm');
+                const formData = new FormData(form);
+                
+                const newMeal = {
+                    id: this.meals.length + 1,
+                    name: formData.get('name') || 'New Meal',
+                    campus: formData.get('campus') || 'UoN',
+                    price: parseInt(formData.get('price')) || 70,
+                    rating: 4.0,
+                    searches: Math.floor(Math.random() * 100) + 100,
+                    status: 'active'
+                };
+                
+                this.meals.unshift(newMeal);
+                this.saveData();
+                this.renderMealsTable();
+                this.updateStats();
+                
+                // Show success message
+                alert('Meal added successfully!');
+                form.reset();
+            }
+            
+            editMeal(mealId) {
+                const meal = this.meals.find(m => m.id === mealId);
+                if (meal) {
+                    // In a real app, open edit modal
+                    alert(`Editing meal: ${meal.name}`);
+                }
+            }
+            
+            deleteMeal(mealId) {
+                if (confirm('Are you sure you want to delete this meal?')) {
+                    this.meals = this.meals.filter(m => m.id !== mealId);
+                    this.saveData();
+                    this.renderMealsTable();
+                    this.updateStats();
+                }
+            }
+            
+            search(query) {
+                // Implement search functionality
+                console.log('Searching for:', query);
+            }
+            
+            updateStats() {
+                document.getElementById('totalMeals').textContent = this.meals.length;
+                document.getElementById('mealsCount').textContent = this.meals.length;
+                
+                // Update other stats
+                const campuses = new Set(this.meals.map(m => m.campus));
+                document.getElementById('totalCampuses').textContent = campuses.size;
+                document.getElementById('campusesCount').textContent = campuses.size;
+            }
+            
+            saveData() {
+                localStorage.setItem('chakulachap_meals', JSON.stringify(this.meals));
+            }
+        }
+        
+        // Global functions for modal
+        function showAddMealModal() {
+            document.getElementById('addMealModal').classList.add('active');
+        }
+        
+        function hideAddMealModal() {
+            document.getElementById('addMealModal').classList.remove('active');
+        }
+        
+        function resetForm() {
+            document.getElementById('mealForm').reset();
+        }
+        
+        // Initialize admin panel
+        const admin = new AdminPanel();
+        window.admin = admin;
+        
+        // Close modal on outside click
+        document.getElementById('addMealModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('addMealModal')) {
+                hideAddMealModal();
+            }
+        });
+    </script>
+</body>
+</html>
